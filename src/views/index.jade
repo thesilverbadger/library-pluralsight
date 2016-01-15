@@ -1,7 +1,29 @@
 html
     head
+        //- bower:css
+        link(rel='stylesheet', href='/lib/bootstrap/dist/css/bootstrap.min.css')
+        link(rel='stylesheet', href='/lib/font-awesome/css/font-awesome.css')
+        //- endbower
+        //- bower:js
+        script(src='/lib/jquery/dist/jquery.js')
+        script(src='/lib/bootstrap/dist/js/bootstrap.js')
+        //- endbower
+        
+        //- inject:css
+        
+        link(rel="stylesheet", href="/css/styles.css")
+        
+        //- endinject
+        //- inject:js
+        
+        script(src="/js/app.js")
+        
+        //- endinject
         title MyApp
     body
         h1 My App
         p
             h3 sub heading
+        ul
+            each val in list
+                li= val
