@@ -2,7 +2,6 @@ var express = require('express');
 var app = express();
 var port = process.env.PORT || 5000;
 
-<<<<<<< HEAD
 var sql = require('mssql');
 var config = {
   user: 'library@cantiaci',
@@ -33,14 +32,13 @@ var nav = [{
 //routers
 var bookRouter = require('./src/routes/bookRoutes')(nav);
 
-=======
->>>>>>> parent of e3e42da... Routing and dynamic constructor injected nav
 //static files
 app.use(express.static('public'));
 app.set('views', './src/views');
 
 app.set('view engine', 'ejs');
 
+app.use('/Books', bookRouter);
 app.get('/', function(req, res){
 	res.render('index', {title: 'Hello from render', 
         nav: [{ 
