@@ -23,7 +23,8 @@ var router = function(nav){
         });
         
     bookRouter.route('/:id')
-        .all(function(req, res, next){
+        .get(function(req, res){
+
             var ps = new sql.PreparedStatement(/* [connection] */);
             ps.input('id', sql.Int);
             ps.prepare('select * from books where bookid = @id', function(err) {
@@ -42,25 +43,16 @@ var router = function(nav){
                         if(err){
                             console.log(err);
                         }
-                        if(recordset.length === 0){
-                            res.send(404, "Not Found");
-                        } else {
-                            req.book = recordset[0];
-                            next();
-                        }
+                        console.log(recordset);
 
+                        res.render('bookView', { 
+                            title: 'books',
+                            nav: nav,
+                            book: recordset[0],
+                        });
                     });
                 });
             });
-            next();
-        })
-        .get(function(req, res){
-
-            res.render('bookView', {
-                title: 'Books',
-                nav: nav,
-                book: req.book
-            })
 
         });
 
