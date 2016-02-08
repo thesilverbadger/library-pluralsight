@@ -1,71 +1,39 @@
 var express = require('express');
+var mongodb = require('mongodb').MongoClient;
 
 var bookRouter = express.Router();
-var sql = require('mssql'); //this gets the SAME instance as the one on app.js
 
 var router = function(nav){
 
     bookRouter.route('/')
         .get(function(req, res){
-            
-            var request = new sql.Request();
-            request.query('select * from books', function(err, recordset){
-                if(!err){
+            var url = 'mongodb://192.168.99.100:32768/libraryDb';
+            mongodb.connect(url, function(err, db){
+                var collection = db.collection('books');
+                collection.find({}).toArray(function(err, results){
                     res.render('bookListView', { 
                         title: 'books',
                         nav: nav,
-                        books: recordset,
+                        books: results 
                     });
-                }
+                });
+
             });
-            
-            
         });
         
     bookRouter.route('/:id')
-        .all(function(req, res, next){
-            var ps = new sql.PreparedStatement(/* [connection] */);
-            ps.input('id', sql.Int);
-            ps.prepare('select * from books where bookid = @id', function(err) {
-                // ... error checks 
-                if(err){
-                    console.log(err);
-                }
-                ps.execute({id: req.params.id}, function(err, recordset) {
-                    // ... error checks 
-                    if(err){
-                        console.log(err);
-                    }
-                    
-                    ps.unprepare(function(err) {
-                        // ... error checks 
-                        if(err){
-                            console.log(err);
-                        }
-                        if(recordset.length === 0){
-                            res.send(404, "Not Found");
-                        } else {
-                            req.book = recordset[0];
-                            next();
-                        }
-
-                    });
-                });
-            });
-            next();
-        })
         .get(function(req, res){
 
             res.render('bookView', {
                 title: 'Books',
                 nav: nav,
-                book: req.book
-            })
+                book: books[req.params.id]
+            });
 
         });
 
         return bookRouter;
-}
+};
 
 
 module.exports = router;
