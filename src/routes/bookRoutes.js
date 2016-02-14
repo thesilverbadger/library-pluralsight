@@ -6,6 +6,14 @@ var bookRouter = express.Router();
 
 var router = function(nav){
 
+    //secures all the book routes - this is middleware
+    bookRouter.use(function(req, res, next){
+       if(!req.user){
+           res.redirect('/');
+       } 
+       next();
+    });
+
     bookRouter.route('/')
         .get(function(req, res){
             var url = 'mongodb://192.168.99.100:32768/libraryDb';
