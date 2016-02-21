@@ -11,7 +11,7 @@ var bookController = function(bookService, nav){
     };
     
     var getIndex = function(req, res){
-        var url = 'mongodb://192.168.99.100:32768/libraryDb';
+        var url = 'mongodb://192.168.99.100:32770/libraryDb';
         mongodb.connect(url, function(err, db){
             var collection = db.collection('books');
             collection.find({}).toArray(function(err, results){
@@ -25,21 +25,34 @@ var bookController = function(bookService, nav){
     };
     
     var getById = function(req, res){
-        var url = 'mongodb://192.168.99.100:32768/libraryDb';
+        var url = 'mongodb://192.168.99.100:32770/libraryDb';
         mongodb.connect(url, function(err, db){
             var collection = db.collection('books');
             var id = new ObjectId(req.params.id);
             
             collection.findOne({_id: id}, function(err, results){
-                
-                bookService.getBookById(results.bookId, function(err, book){
-                    results.book = book;
+                if (results.bookId){
+                     bookService.getBookById(results.bookId, function(err, book){
+                        results.book = book;
+                        res.render('bookView', { 
+                            title: 'books',
+                            nav: nav,
+                            book: results 
+                        });
+                    });
+                }
+                else {
+                    results.book = {
+                        image_url: '',
+                        
+                    };
                     res.render('bookView', { 
                         title: 'books',
                         nav: nav,
                         book: results 
                     });
-                });
+                }
+               
             });
         });
     };

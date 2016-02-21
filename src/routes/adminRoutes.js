@@ -9,7 +9,8 @@ var router = function(nav){
         title: 'War and Peace',
         genre: 'Historical Fiction',
         author: 'Lev Nikolayevich Tolstoy',
-        read: false
+        read: false,
+        bookId: 656
     },
     {
         title: 'The Martian',
@@ -21,7 +22,7 @@ var router = function(nav){
   adminRouter.route('/addBooks')
     .get(function(req, res){
   
-       var url = 'mongodb://192.168.99.100:32768/libraryDb';
+       var url = 'mongodb://192.168.99.100:32770/libraryDb';
        mongodb.connect(url, function(err, db){
            var collection = db.collection('books');
            collection.insertMany(books, function(err, results){

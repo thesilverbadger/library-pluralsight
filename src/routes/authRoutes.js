@@ -9,7 +9,7 @@ var router = function(){
     .post(function(req, res){
         console.log(req.body);
         //login is added by passport
-        var url = 'mongodb://192.168.99.100:32768/libraryDb';
+        var url = 'mongodb://192.168.99.100:32770/libraryDb';
         mongodb.connect(url, function(err, db){
             var collection = db.collection('users');
             var user = {
